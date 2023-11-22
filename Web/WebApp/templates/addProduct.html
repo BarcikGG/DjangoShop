@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+
+{% block title %}Страница добавления товара{% endblock %}
+
+{% block content %}
+    <h1>Страница добавления товара</h1>
+    <div class="container">
+        <form method="post" enctype="multipart/form-data" class="product-form">
+            {% csrf_token %}
+            <p>Название</p>
+            {{ form.name }}
+            <p>Описание</p>
+            {{ form.description }}
+            <p>Цена</p>
+            {{ form.price }}
+            <p>Картинка</p>
+            {{ form.image }}
+            <p>Категория</p>
+            {{ form.category }}
+            <p>Теги</p>
+            {{ form.tags }}
+            <button type="submit" class="submit-button">Добавить товар</button>
+        </form>
+
+        <div id="preview_card" class="product-card">
+            <h2 id="dynamic-name">...</h2>
+            <img id="dynamic-image" src="#" alt="">
+            <p id="dynamic-price">...</p>
+        </div>
+    </div>
+
+    <script>
+        const nameInput = document.querySelector('#id_name');
+        const priceInput = document.querySelector('#id_price');
+        const imageInput = document.querySelector('#id_image');
+
+        const dynamicName = document.querySelector('#dynamic-name');
+        const dynamicPrice = document.querySelector('#dynamic-price');
+        const dynamicImage = document.querySelector('#dynamic-image');
+
+        nameInput.addEventListener('input', (event) => {
+            dynamicName.textContent = event.target.value;
+        });
+
+        priceInput.addEventListener('input', (event) => {
+            dynamicPrice.textContent = event.target.value;
+        });
+
+        imageInput.addEventListener('change', (event) => {
+            const file = event.target.files[0];
+            if (file) {
+                dynamicImage.src = URL.createObjectURL(file);
+            }
+        });
+    </script>
+{% endblock %}

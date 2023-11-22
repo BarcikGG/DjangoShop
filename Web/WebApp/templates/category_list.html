@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+
+{% block title %}Список категорий{% endblock %}
+
+{% block content %}
+    {% for category in categories %}
+      <a href="{% url 'category_detail' category.id %}" class="list-button">{{ category.name }}</a>
+    {% endfor %}
+
+    <div class="pagination">
+        <span class="step-links">
+            <a href="?page=1">&lt;&lt;</a>
+
+            <div class="numbers">
+                {% if categories.number > 2 %}
+                    <a href="?page=1">1</a>
+                    {% if categories.number > 3 %}
+                        <span>...</span>
+                    {% endif %}
+                {% endif %}
+
+                {% for i in categories.paginator.page_range %}
+                    {% if i >= categories.number|add:'-1' and i <= categories.number|add:'1' %}
+                        {% if i == categories.number %}
+                            <span class="current">{{ i }}</span>
+                        {% else %}
+                            <a href="?page={{ i }}">{{ i }}</a>
+                        {% endif %}
+                    {% endif %}
+                {% endfor %}
+
+                {% if categories.number < categories.paginator.num_pages|add:'-1' %}
+                    {% if categories.number < categories.paginator.num_pages|add:'-2' %}
+                        <span>...</span>
+                    {% endif %}
+                    <a href="?page={{ categories.paginator.num_pages }}">{{ categories.paginator.num_pages }}</a>
+                {% endif %}
+            </div>
+
+            <a href="?page={{ categories.paginator.num_pages }}">&gt;&gt;</a>
+        </span>
+    </div>
+{% endblock %}

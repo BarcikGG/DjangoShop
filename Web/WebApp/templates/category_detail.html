@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+{% block title %}Товары в категории {{ category.name }}{% endblock %}
+
+{% block content %}
+  <h1>Товары в категории "{{ category.name }}"</h1>
+    <div class="container">
+        {% for product in products %}
+            {% if product.is_deleted == False %}
+                <a href="{% url 'view_product' product.id %}" class="empty_link">
+                    <div class="product-card">
+                        <h2>{{ product.name }}</h2>
+                        <img src="{{ product.image.url }}" alt="{{ product.name }}">
+                        <p class="price">Price: ${{ product.price }}</p>
+                    </div>
+                </a>
+            {% endif %}
+        {% endfor %}
+    </div>
+{% endblock %}

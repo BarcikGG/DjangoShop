@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+
+{% block title %}Список тегов{% endblock %}
+
+{% block content %}
+  {% for tag in tags %}
+    <a href="{% url 'tag_detail' tag.id %}" class="list-button">{{ tag.name }}</a>
+  {% endfor %}
+
+    <div class="pagination">
+        <span class="step-links">
+            <a href="?page=1">&lt;&lt;</a>
+
+            <div class="numbers">
+                {% if tags.number > 2 %}
+                    <a href="?page=1">1</a>
+                    {% if tags.number > 3 %}
+                        <span>...</span>
+                    {% endif %}
+                {% endif %}
+
+                {% for i in tags.paginator.page_range %}
+                    {% if i >= tags.number|add:'-1' and i <= tags.number|add:'1' %}
+                        {% if i == tags.number %}
+                            <span class="current">{{ i }}</span>
+                        {% else %}
+                            <a href="?page={{ i }}">{{ i }}</a>
+                        {% endif %}
+                    {% endif %}
+                {% endfor %}
+
+                {% if tags.number < tags.paginator.num_pages|add:'-1' %}
+                    {% if tags.number < tags.paginator.num_pages|add:'-2' %}
+                        <span>...</span>
+                    {% endif %}
+                    <a href="?page={{ tags.paginator.num_pages }}">{{ tags.paginator.num_pages }}</a>
+                {% endif %}
+            </div>
+
+            <a href="?page={{ tags.paginator.num_pages }}">&gt;&gt;</a>
+        </span>
+    </div>
+{% endblock %}

@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+
+{% block title %}Страница каталога{% endblock %}
+
+{% block content %}
+    <div class="container">
+        {% for product in products %}
+            {% if product.is_deleted == False %}
+                <a href="{% url 'view_product' product.id %}" class="empty_link">
+                    <div class="product-card">
+                        <h2>{{ product.name }}</h2>
+                        <img src="{{ product.image.url }}" alt="{{ product.name }}">
+                        <p class="price">Price: ${{ product.price }}</p>
+                    </div>
+                </a>
+            {% endif %}
+        {% endfor %}
+    </div>
+
+    <div class="pagination">
+        <span class="step-links">
+            <a href="?page=1">&lt;&lt;</a>
+
+            <div class="numbers">
+                {% if products.number > 2 %}
+                    <a href="?page=1">1</a>
+                    {% if products.number > 3 %}
+                        <span>...</span>
+                    {% endif %}
+                {% endif %}
+
+                {% for i in products.paginator.page_range %}
+                    {% if i >= products.number|add:'-1' and i <= products.number|add:'1' %}
+                        {% if i == products.number %}
+                            <span class="current">{{ i }}</span>
+                        {% else %}
+                            <a href="?page={{ i }}">{{ i }}</a>
+                        {% endif %}
+                    {% endif %}
+                {% endfor %}
+
+                {% if products.number < products.paginator.num_pages|add:'-1' %}
+                    {% if products.number < products.paginator.num_pages|add:'-2' %}
+                        <span>...</span>
+                    {% endif %}
+                    <a href="?page={{ products.paginator.num_pages }}">{{ products.paginator.num_pages }}</a>
+                {% endif %}
+            </div>
+
+            <a href="?page={{ products.paginator.num_pages }}">&gt;&gt;</a>
+        </span>
+    </div>
+{% endblock %}
